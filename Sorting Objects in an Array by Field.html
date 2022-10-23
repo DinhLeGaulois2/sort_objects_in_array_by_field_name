@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sorting Objects in Array by Field</title>
+
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js"
+        integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css"
+        integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.min.js"
+        integrity="sha384-ODmDIVzN+pFdexxHEHFBQH3/9/vQ9uori45z4JjnFsRydbmQbmL5t1tQ0culUzyK"
+        crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="./style/sortingStyle.css">
+
+    <script src="./script/calculations.js"></script>
+    <script src="./script/cstsNVars.js"></script>
+    <script src="./script/display.js"></script>
+    <script src="./script/generation.js"></script>
+</head>
+
+<body>
+    <br /><br />
+    <p align="center">[<a href="../../../../../Programming/Programming.html">Programming</a>]</p>
+
+    <div class="container-note">
+        <h3>Aim:</h3>
+        <p>Using <a href="https://en.wikipedia.org/wiki/JavaScript" target="_blank">JavaScript</a> along with 3 basics tools (<a href="https://en.wikipedia.org/wiki/HTML" target="_blank">HTML</a>,
+        <a href="https://en.wikipedia.org/wiki/CSS" target="_blank">CSS</a> and 
+        <a href="https://en.wikipedia.org/wiki/JQuery" target="_blank">jQuery</a>), we try to build an "INTERACTIVE" webpage (mostly, for learning purposes).
+        The goals are:</p>
+        <ol type="1">
+            <li>Sorting by <b><u>ANY</u></b> arbitrary key of objects in an array,</li>
+            <li>Generation the values of the fields randomly <b>EVERYTIME</b> the page is refreshed,</li>
+            <li>Updating data, of different parts, of the page depending on the changes we've made (by sorting),
+                there is a particular difficulty: how to keep the
+                "<a href="https://en.wikipedia.org/wiki/Event_(computing)" target="_blank">Event handlers</a>" (or
+                <b>listeners</b>) <b><u>actives</u></b> when we refresh
+                the table...
+            </li>
+        </ol>
+        <p>We could build a (simple and <b>INTERACTIVE</b>) website (providing informations, for example) without using
+            any "<a href="https://en.wikipedia.org/wiki/Frontend_and_backend" target="_blank">backend</a>" (or "<a
+                href="https://en.wikipedia.org/wiki/Database" target="_blank">database</a>"), which could
+            be a good way to practice for a beginner in programming. But of course,
+            with a "<a href="https://en.wikipedia.org/wiki/Frontend_and_backend" target="_blank">backend</a>" and "<a
+                href="https://en.wikipedia.org/wiki/Database" target="_blank">database(s)</a>", we have
+            much more possibilities...</p>
+    </div>
+    <br />
+    <table align="center" border="1">
+        <tr>
+            <td>
+                <h3 align="center" id="table-of-content">Table of Contents</h3>
+                <hr />
+                <ul>
+                    <li><a href="#generatedArr">Generation of an Array of Objects</a></li>
+                    <li><a href="#displayTable">Show the Table</a></li>
+                    <li>Interesting tools:
+                        <ul>
+                            <li><a href="#sortingByField">Sorting by a Field's Name</a></li>
+                            <li>Setting Listeners
+                                <ul>
+                                    <li><a href="#listeners-setup">Setting up "listeners" for objects' keys</a></li>
+                                    <li><a href="#listeners-refreshing">Setting up "listeners" after every click...</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </td>
+        </tr>
+    </table>
+    <br />
+    <hr />
+    <h2 id="generatedArr">Generation of an Array of Objects (<a href="#table-of-content">Table of Contents</a>)</h2>
+    <p>The code for this is <a href="./script/generation.js" target="_blank">here</a>...</p>
+    <br />
+    <h3 align="center">
+        <font color="red"><b>Interactive Table: the Position of Objects Will Change after a <a href="#id_active_sortField">Sorting</a> Operation...</b></font>
+    </h3>
+    <table align="center" border="1">
+        <tr>
+            <td>
+                <h3 align="center">An Array with <b><span id="id_nbOfObjects"></span></b> objects</h3>
+                <hr />
+                <div id="id_showArray"></div>
+            </td>
+        </tr>
+    </table>
+    <!-- =============================================================================== -->
+    <br />
+    <hr />
+    <h2 id="displayTable">Show the Table (<a href="#table-of-content">Table of Contents</a>)</h2>
+    <p>Let try with a <b><u>generated</u></b> array with <span id="id_nbTotalOfObjs"></span> objects (the value of each
+        field
+        is generated <u>randomly</u>)...</p>
+    <p>Click on a <i>header</i> to sort the table by <b>ASC</b> (ascendant) or <b>DESC</b> (descendant), the rules are:
+    </p>
+    <table align="center" class="table-border">
+        <tr>
+            <th></th>
+            <th>Previous</th>
+            <th>Now</th>
+        </tr>
+        <tr>
+            <td><b>New <i>header</i></b></td>
+            <td align="center"><b>X</b></td>
+            <td class="sortASC" align="center"><b>ASC</b></td>
+        </tr>
+        <tr class="bg-gray">
+            <td><b>Same <i>header</i></b></td>
+            <td class="sortASC" align="center"><b>ASC</b></td>
+            <td class="sortDESC" align="center"><b>DESC</b></td>
+        </tr>
+        <tr>
+            <td><b>Same <i>header</i></b></td>
+            <td class="sortDESC" align="center"><b>DESC</b></td>
+            <td class="sortASC" align="center"><b>ASC</b></td>
+        </tr>
+    </table>
+    <br />
+    <p>The generated table (the code for this is "<a href="./script/display.js" target="_blank">showAsTable</a>"...):
+    </p>
+    <h3 id="id_active_sortField" align="center"></h3>
+    <div id="id_showTable"></div>
+    <h3 align="center">
+        <font color="red"><b>Interactive Table: Click on a Header to Sort the Field's Values...</b></font>
+    </h3>
+    <!-- =============================================================================== -->
+    <br />
+    <hr />
+    <h2 id="sortingByField">Sorting by a Field's Name (<a href="#table-of-content">Table of Contents</a>)</h2>
+    <p>Usually, if I have objects in array like:</p>
+    <table align="center">
+        <tr>
+            <td id="example_arr">
+                <pre><code>const arr = [
+    { 
+        key1: val1, 
+        key2: val2   
+    },
+    { 
+        key1: val3, 
+        key2: val4   
+    },
+    { 
+        key1: val5, 
+        key2: val6   
+    },
+    { 
+        key1: val7, 
+        key2: val8   
+    }
+]</code></pre>
+            </td>
+        </tr>
+    </table>
+    <br />
+    <p>and I want to sort - let say ascending - the values on one of the field's name (key), I'll create a function:</p>
+
+    <table align="center">
+        <tr>
+            <td>
+                <pre><code>const <font color="red"><b>sortAsc</b></font> = (a, b) => {
+    if (a[<b>key1</b>] < b[<b>key1</b>])
+        return -1;
+    if (a[<b>key1</b>] > b[<b>key1</b>])
+        return 1;
+    return 0;
+}
+
+// then sort the array by "<b>key1</b>"
+const sortedList = arr.sort(<font color="red"><b>sortAsc</b></font>)</code></pre>
+            </td>
+        </tr>
+    </table>
+    <br />
+    <p>As we want to allow a user to sort by his/her key of choice, we need to change the function a little bit:
+    </p>
+    <table align="center">
+        <tr>
+            <td>
+                <pre><code>const <font color="red"><b>sortingObjsInArr</b></font> = (arr, isAsc, keyName) => {
+    const sortAsc = (a, b) => {
+        if (a[keyName] < b[keyName])
+            return -1;
+        if (a[keyName] > b[keyName])
+            return 1;
+        return 0;
+    }
+
+    const sortDesc = (a, b) => {
+        if (a[keyName] > b[keyName])
+            return -1;
+        if (a[keyName] < b[keyName])
+            return 1;
+        return 0;
+    }
+
+    if (isAsc) return arr.sort(sortAsc)
+    else return arr.sort(sortDesc)
+}</code></pre>
+            </td>
+        </tr>
+    </table>
+    <br />
+    <p>Now, we could select a field of an object (within an array) to make a sorting upon it (we are using the <a
+            href="#example_arr">example</a> above):</p>
+    <ul>
+        <li>Ascending sorting by the key "<b>key1</b>"
+            <p align="center" class="container-note">const sortedArr = <font color="red"><b>sortingObjsInArr</b></font>
+                (arr, <font color="blue"><b>true</b></font>,
+                "<b>key1</b>")</p>
+        </li>
+        <li>Descending sorting by the key "<b>key1</b>"
+            <p align="center" class="container-note">const sortedArr = <font color="red"><b>sortingObjsInArr</b></font>
+                (arr, <font color="blue"><b>false</b></font>,
+                "<b>key1</b>")</p>
+        </li>
+    </ul>
+    <!-- =============================================================================== -->
+    <br />
+    <hr />
+    <h2 id="listeners-setup">Setting up "listeners" for objects' keys (<a href="#table-of-content">Table of
+            Contents</a>)</h2>
+    <p>If we have an object:</p>
+    <table align="center">
+        <tr>
+            <td id="example_arr">
+                <pre><code>const an_object = { 
+    key1: val1, 
+    key2: val2,    
+    key3: val3,
+}</code></pre>
+            </td>
+        </tr>
+    </table>
+    <p>To be able to add "<a href="https://en.wikipedia.org/wiki/Event_(computing)" target="_blank">Event handlers</a>"
+        to each <b><i>key</i></b>, we do:</p>
+    <ol type="1">
+        <li>Get the <i>keys</i> (in an array):
+            <div class="container-note">const keysInArr = <b>Object.keys</b>(an_object) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//
+                the result will be: <font color="blue">keysInArr = ["key1", "key2", key3"]</font>
+            </div>
+        </li>
+        <li>Attach a "<a href="https://en.wikipedia.org/wiki/Event_(computing)" target="_blank">Event handler</a>" for
+            each key (using... "<font color="red"><b>foreach</b></font>"):
+            <div class="container-note">
+                <pre><code>keysInArr.<font color="red"><b>foreach</b></font>(<b><i>aKey</i></b> => {        
+    $("#" + <b><i>aKey</i></b>).click(() => {
+        // refresh the web page with new data
+    })
+})</code></pre>
+            </div>
+        </li>
+    </ol>
+    <p>
+        <font color="red"><b><u>Problem:</u></b></font> after refreshing the web page, by injecting text, with the
+        <b><i>SAME</i></b> ids for different parts, but
+        the created "<a href="https://en.wikipedia.org/wiki/Event_(computing)" target="_blank">Event handlers</a>" are
+        <b><u>NO LONGER</u></b>
+        attach to the new (with the <b><i>SAME</i></b> name) IDs. We need to create, yet again, new "<a
+            href="https://en.wikipedia.org/wiki/Event_(computing)" target="_blank">Event handlers</a>"
+        for the same IDs (keys)...
+    </p>
+    <!-- =============================================================================== -->
+    <hr />
+    <h2 id="listeners-refreshing">Setting up "listeners" after every click... (<a href="#table-of-content">Table of
+            Contents</a>)</h2>
+    <p>There is a function ("<font color="orange"><b>setHandlers</b></font>") that attaches the "<a
+            href="https://en.wikipedia.org/wiki/Event_(computing)" target="_blank">Event handler</a>"
+        to each <i>key</i>. We need to do 2 things</p>
+    <ol type="1">
+        <li>Call the function "<font color="orange"><b>setHandlers</b></font>" at initialisation,</li>
+        <li>Call the function - yet again - "<font color="orange"><b>setHandlers</b></font>" after each refreshment of
+            the
+            page to re-attach a "<a href="https://en.wikipedia.org/wiki/Event_(computing)" target="_blank">Event
+                handler</a>" to each <i>key</i> again...</li>
+    </ol>
+
+    <p>Here is the code:</p>
+    <div class="container-note">
+        <pre><code>const keysInArr = Object.keys(an_object)
+
+const <font color="orange"><b>setHandlers</b></font> = () => {
+    keysInArr.forEach(aKey => {
+        $("#" + aKey).click(() => {
+            // refresh the web page with new data
+
+            // <b>after every "click" => to create new handlers...</b>
+            <font color="orange"><b>setHandlers()</b></font> &nbsp;&nbsp;&nbsp;&nbsp;// <font color="red"><b>&larr; KEY PART...</b></font>
+        })
+    })
+}
+
+// <b>at the initialisation</b>
+<font color="orange"><b>setHandlers()</b></font></code></pre>
+    </div>
+    <!-- =============================================================================== -->
+
+    <br />
+    <script>
+        $(document).ready(function () {
+            document.getElementById("id_nbTotalOfObjs").innerHTML = _defaultNbObjs.toString()
+            document.getElementById("id_nbOfObjects").innerHTML = _defaultNbObjs.toString()
+            generation()
+            document.getElementById("id_showArray").innerHTML = showArr()
+            document.getElementById("id_showTable").innerHTML = showAsTable()
+
+            const setHandlers = () => {
+                if (sortBy.fieldId.length > 0) {
+                    if (sortBy.isAsc === true) {
+                        document.getElementById("id_active_sortField").innerHTML = '<font color="red"><span class="glyphicon glyphicon-arrow-right"></span></font>The sorting field is "<b class="sortASC">' +
+                            sortBy.fieldId + '</b>"'
+                        document.getElementById("id_active_sortField").innerHTML += ' (type "<b class="sortASC">ASC</b>": increasing from top to bottom)'
+                    }
+                    else {
+                        document.getElementById("id_active_sortField").innerHTML = '<font color="red"><span class="glyphicon glyphicon-arrow-right"></span></font>The sorting field is "<b class="sortDESC">' +
+                            sortBy.fieldId + '</b>"'
+                        document.getElementById("id_active_sortField").innerHTML += ' (type "<b class="sortDESC">DESC</b>": descreasing from top to bottom)'
+                    }
+                }
+
+                // "anId" is the name of each field of an object...
+                fieldIdsList.forEach(anId => {
+                    $("#" + anId).click(() => {
+                        setSortingField({ id: anId })
+                        document.getElementById("id_showArray").innerHTML = showArr()
+                        document.getElementById("id_showTable").innerHTML = showAsTable()
+
+                        // after every "click" => to create new handlers...
+                        setHandlers()
+                    })
+                })
+            }
+
+            // at the initialisation
+            setHandlers()
+        });
+
+    </script>
+
+</body>
+
+</html>
