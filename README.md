@@ -6,7 +6,7 @@ If we have an array of objects like:
 
 Which could be showed as a table:
 
-![](./pics/arr_not_sorting.jpg)
+![](./pics/arr_not_sorted.jpg)
 
 This way of doing thing might be obvious to most of programmers, but it wasn't for me: to sort objects within an array, I've learned (here, it's ascending sorting):
 
@@ -24,4 +24,10 @@ The "**fieldName**" is fixed and it could not be changed for another field name.
 
 ![](./pics/code.jpg)
 
-To sort, 
+To sort, I just need to click on a field (first time: Ascending, not first time: opposite of the sorting state):
+
+    const sortedArr = sortingObjsInArr(myArr, true, "field3")
+
+The result is:
+
+![](./pics/arr_sorted.jpg)
